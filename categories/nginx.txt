@@ -1,0 +1,23 @@
+# Nginx Commands
+
+nginx -t : Test configuration
+nginx -s : Send signal
+  nginx -s reload : Reload config
+  nginx -s stop : Fast shutdown
+systemctl start nginx : Start service
+systemctl stop nginx : Stop service
+systemctl restart nginx : Restart service
+systemctl status nginx : Check status
+
+# Common Directories
+/etc/nginx : Configuration
+/var/log/nginx : Log files
+/usr/share/nginx/html : Default web root
+
+# Log Monitoring
+tail -f /var/log/nginx/access.log
+tail -f /var/log/nginx/error.log
+
+# Configuration Tips
+# server blocks in /etc/nginx/sites-available/
+# Enable site: ln -s /etc/nginx/sites-available/example /etc/nginx/sites-enabled/

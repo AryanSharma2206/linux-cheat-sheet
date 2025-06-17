@@ -1,0 +1,39 @@
+# Vim Commands
+
+# Basic Movement
+h : Left
+j : Down
+k : Up
+l : Right
+0 : Start of line
+$ : End of line
+gg : First line
+G : Last line
+Ctrl+f : Page down
+Ctrl+b : Page up
+
+# Editing
+i : Insert mode
+a : Append after cursor
+o : New line below
+O : New line above
+x : Delete character
+dd : Delete line
+yy : Yank (copy) line
+p : Paste after
+P : Paste before
+u : Undo
+Ctrl+r : Redo
+
+# Search/Replace
+/pattern : Search forward
+?pattern : Search backward
+n : Next match
+N : Previous match
+:%s/old/new/g : Replace all
+
+# Saving/Exiting
+:w : Save
+:q : Quit
+:wq : Save and quit
+:q! : Quit without saving

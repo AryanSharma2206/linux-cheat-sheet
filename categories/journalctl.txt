@@ -1,0 +1,23 @@
+# Journalctl Commands (Systemd Logs)
+
+journalctl : Show all logs
+journalctl -u : Show logs for service
+  journalctl -u nginx
+journalctl -f : Follow logs (tail -f)
+journalctl -b : Current boot logs
+journalctl -k : Kernel messages
+journalctl --since : Filter by time
+  journalctl --since "2023-01-01"
+  journalctl --since "1 hour ago"
+journalctl --until : Filter end time
+journalctl -p : Priority filter
+  journalctl -p err : Only errors
+journalctl -n : Show n entries
+  journalctl -n 50
+journalctl --disk-usage : Show log size
+journalctl --vacuum-size= : Clean logs
+  journalctl --vacuum-size=500M
+journalctl --no-pager : Disable pager
+journalctl -o : Output format
+  journalctl -o json : JSON format
+

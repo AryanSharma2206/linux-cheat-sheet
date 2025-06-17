@@ -1,0 +1,23 @@
+# File Permissions Commands
+
+chmod : Change file permissions
+  chmod 755 : rwxr-xr-x
+  chmod +x : Add execute permission
+  chmod -R : Recursive change
+chown : Change file owner
+  chown user:group : Change both
+  chown -R : Recursive change
+chgrp : Change group ownership
+umask : Set default permissions
+stat : Display file status
+  stat -c %a : Show octal permissions
+getfacl : View ACLs
+setfacl : Set ACLs
+  setfacl -m u:user:rwx : Add user ACL
+  setfacl -x u:user : Remove user ACL
+id : Show user/group IDs
+groups : Show user's groups
+newgrp : Temporarily change primary group
+sudo : Execute as superuser
+su : Switch user
+  su - : With environment

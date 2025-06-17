@@ -1,0 +1,30 @@
+# Networking Commands
+
+ip addr : Show IP addresses (modern)
+ifconfig : Show network interfaces (deprecated)
+ping : Test network connectivity
+  ping -c 4 : Send 4 packets
+traceroute : Trace network path
+mtr : Network diagnostic tool
+netstat : Network statistics
+  netstat -tulnp : Show listening ports
+ss : Socket statistics (modern netstat)
+  ss -tulnp : Show listening ports
+dig : DNS lookup
+nslookup : DNS query tool
+whois : Domain information
+host : DNS lookup utility
+route : Show routing table
+  route -n : Numerical addresses
+iwconfig : Wireless interface config
+nmcli : NetworkManager command line
+curl : Transfer data from URLs
+  curl -I : Show headers only
+wget : Download files
+  wget -c : Continue interrupted download
+scp : Secure copy between hosts
+rsync : Remote file sync
+  rsync -avz : Archive, verbose, compress
+nc/netcat : Network swiss army knife
+tcpdump : Network packet analyzer
+  tcpdump -i eth0 : Capture on interface

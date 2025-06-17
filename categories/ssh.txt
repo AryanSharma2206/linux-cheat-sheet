@@ -1,0 +1,20 @@
+# SSH Commands
+
+ssh : Connect to remote host
+  ssh user@host
+  ssh -p 2222 : Custom port
+ssh-keygen : Create key pair
+  ssh-keygen -t rsa -b 4096
+ssh-copy-id : Copy key to remote host
+scp : Secure copy
+  scp file user@host:path
+sftp : Secure FTP
+ssh-agent : Manage keys
+ssh-add : Add keys to agent
+ssh -v : Verbose mode
+ssh -D : SOCKS proxy
+ssh -L : Local port forwarding
+ssh -R : Remote port forwarding
+ssh -X : X11 forwarding
+ssh_config : Client config file (~/.ssh/config)
+sshd_config : Server config file (/etc/ssh/sshd_config)

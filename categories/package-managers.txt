@@ -1,0 +1,39 @@
+# Package Management Commands
+
+# APT (Debian/Ubuntu)
+apt update : Update package list
+apt upgrade : Upgrade packages
+apt install : Install package
+apt remove : Remove package
+apt purge : Remove with configs
+apt search : Search packages
+apt show : Show package info
+apt list --installed : List installed
+apt autoremove : Remove unused packages
+
+# YUM/DNF (RHEL/CentOS/Fedora)
+dnf install : Install package
+dnf remove : Remove package
+dnf update : Update packages
+dnf search : Search packages
+dnf info : Show package info
+dnf list installed : List installed
+
+# Pacman (Arch)
+pacman -S : Install package
+pacman -R : Remove package
+pacman -Syu : Full system upgrade
+pacman -Qs : Search installed
+pacman -Si : Show package info
+
+# Snap
+snap install : Install snap
+snap remove : Remove snap
+snap list : List installed
+snap refresh : Update snaps
+
+# Flatpak
+flatpak install : Install package
+flatpak uninstall : Remove package
+flatpak list : List installed
+flatpak update : Update packages

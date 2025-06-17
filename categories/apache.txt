@@ -1,0 +1,25 @@
+# Apache Commands
+
+apachectl -t : Test configuration
+apachectl restart : Restart service
+apachectl graceful : Graceful restart
+apachectl stop : Stop service
+systemctl start apache2 : Start (systemd)
+systemctl status apache2 : Check status
+
+# Common Directories
+/etc/apache2 : Configuration (Debian)
+/etc/httpd : Configuration (RHEL)
+/var/www/html : Default web root
+/var/log/apache2 : Log files (Debian)
+/var/log/httpd : Log files (RHEL)
+
+# Log Monitoring
+tail -f /var/log/apache2/access.log
+tail -f /var/log/apache2/error.log
+
+# Configuration Tips
+# Virtual hosts in /etc/apache2/sites-available/
+# Enable site: a2ensite example.com
+# Disable site: a2dissite example.com
+# Modules: a2enmod, a2dismod

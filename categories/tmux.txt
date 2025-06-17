@@ -1,0 +1,29 @@
+# Tmux Commands
+
+# Sessions
+tmux new -s name : New named session
+tmux ls : List sessions
+tmux attach -t name : Attach to session
+tmux kill-session -t name : Kill session
+
+# Windows (tabs)
+Ctrl+b c : Create window
+Ctrl+b n : Next window
+Ctrl+b p : Previous window
+Ctrl+b & : Kill window
+Ctrl+b , : Rename window
+
+# Panes
+Ctrl+b % : Vertical split
+Ctrl+b " : Horizontal split
+Ctrl+b arrow : Switch panes
+Ctrl+b x : Kill pane
+Ctrl+b z : Zoom pane
+Ctrl+b space : Toggle layouts
+
+# Misc
+Ctrl+b d : Detach session
+Ctrl+b [ : Enter copy mode
+Ctrl+b ] : Paste
+Ctrl+b $ : Rename session
+Ctrl+b : : Command prompt

@@ -1,0 +1,23 @@
+# Filesystem Commands
+
+mount : Mount filesystem
+  mount -a : Mount all in fstab
+umount : Unmount filesystem
+df : Disk space usage
+  df -h : Human-readable
+du : Directory space usage
+  du -sh * : Summary per directory
+lsblk : List block devices
+blkid : Show block device attributes
+fdisk : Partition table manipulator
+parted : Advanced partition tool
+mkfs : Create filesystem
+  mkfs.ext4 : Create ext4 fs
+fsck : Filesystem check
+  fsck -y : Auto-repair
+tune2fs : Tune ext filesystem
+dd : Low-level copy
+  dd if=/dev/zero of=file bs=1M count=100
+ln : Create links
+  ln -s : Symbolic link
+findmnt : Show mounted filesystems
