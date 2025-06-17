@@ -1,0 +1,24 @@
+# UFW (Uncomplicated Firewall) Commands
+
+ufw enable : Enable firewall
+ufw disable : Disable firewall
+ufw status : Show status
+  ufw status verbose : Detailed status
+ufw default : Set default policy
+  ufw default deny : Deny all incoming by default
+  ufw default allow : Allow all incoming by default
+ufw allow : Allow traffic
+  ufw allow 22 : Allow SSH
+  ufw allow 80/tcp : Allow HTTP
+  ufw allow from 192.168.1.100 : Allow from specific IP
+ufw deny : Deny traffic
+  ufw deny 23 : Deny Telnet
+ufw delete : Delete rule
+  ufw delete allow 22 : Delete SSH allow rule
+ufw reset : Reset all rules
+ufw logging : Configure logging
+  ufw logging on : Enable logging
+  ufw logging off : Disable logging
+ufw show added : Show added rules
+ufw app list : List application profiles
+ufw app info : Show info for application profile

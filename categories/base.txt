@@ -1,0 +1,39 @@
+# Basic Linux Commands
+
+pwd : Print working directory
+ls : List directory contents
+  ls -l : Long listing format
+  ls -a : Show hidden files
+cd : Change directory
+  cd ~ : Go to home directory
+  cd - : Go to previous directory
+cp : Copy files or directories
+  cp -r : Recursive copy (for directories)
+mv : Move/rename files
+rm : Remove files
+  rm -rf : Force recursive removal (dangerous)
+mkdir : Create directory
+rmdir : Remove empty directory
+cat : Display file contents
+less : View file page by page
+head : Show first lines of file
+tail : Show last lines of file
+  tail -f : Follow log file
+grep : Search text patterns
+  grep -r : Recursive search
+find : Search for files
+  find . -name "*.txt" : Find all txt files
+chmod : Change file permissions
+chown : Change file owner
+tar : Archive files
+  tar -czvf : Create gzipped tar archive
+  tar -xzvf : Extract gzipped tar archive
+df : Disk space usage
+du : Directory space usage
+  du -sh : Human-readable summary
+top : Display processes
+htop : Interactive process viewer
+ps : Process status
+  ps aux : Show all processes
+kill : Terminate process
+  kill -9 : Force kill

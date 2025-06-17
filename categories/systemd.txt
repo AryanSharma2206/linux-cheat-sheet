@@ -1,0 +1,22 @@
+# Systemd Commands
+
+systemctl start : Start service
+systemctl stop : Stop service
+systemctl restart : Restart service
+systemctl reload : Reload configuration
+systemctl status : Check service status
+systemctl enable : Enable service at boot
+systemctl disable : Disable service at boot
+systemctl is-active : Check if service is running
+systemctl is-enabled : Check if service is enabled
+systemctl list-units : List all units
+  systemctl list-units --type=service : List services
+systemctl list-timers : List timers
+systemctl mask : Completely disable service
+systemctl unmask : Remove service mask
+systemctl daemon-reload : Reload systemd config
+journalctl : View system logs
+  journalctl -u : View logs for specific service
+  journalctl -f : Follow logs
+  journalctl --since "2023-01-01" : Filter by date
+  journalctl -p err : Show only errors

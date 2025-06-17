@@ -1,0 +1,27 @@
+# User Management Commands
+
+whoami : Show current user
+id : Show user and group info
+who : Show logged in users
+w : Show logged in users and activities
+last : Show last logged in users
+useradd : Add new user
+  useradd -m : Create with home directory
+  useradd -G : Add to secondary groups
+usermod : Modify user
+  usermod -aG : Append to groups
+userdel : Delete user
+  userdel -r : Remove home directory too
+passwd : Change password
+  passwd -l : Lock account
+  passwd -u : Unlock account
+groupadd : Add new group
+groupmod : Modify group
+groupdel : Delete group
+groups : Show user groups
+newgrp : Change primary group temporarily
+sudo : Execute as superuser
+visudo : Edit sudoers file safely
+su : Switch user
+  su - : Login as user with environment
+chage : Change password expiry info

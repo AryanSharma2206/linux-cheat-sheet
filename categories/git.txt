@@ -1,0 +1,26 @@
+# Git Commands
+
+git init : Initialize new repository
+git clone : Clone a repository
+git status : Show working tree status
+git add : Add files to staging
+  git add . : Add all files
+git commit : Commit changes
+  git commit -m "message" : Commit with message
+git push : Push to remote repository
+git pull : Fetch and merge from remote
+git branch : List/create branches
+  git branch -d : Delete branch
+git checkout : Switch branches
+  git checkout -b : Create and switch to new branch
+git merge : Merge branches
+git rebase : Reapply commits on top of another branch
+git log : Show commit logs
+  git log --oneline : Compact log view
+git diff : Show changes
+git stash : Stash changes temporarily
+git remote : Manage remote repositories
+git reset : Reset current HEAD
+  git reset --hard : Discard all changes
+git tag : Create/list tags
+git config : Configure settings
