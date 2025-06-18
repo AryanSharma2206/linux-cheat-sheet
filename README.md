@@ -51,15 +51,15 @@ flowchart TD
 
 Contributions are welcome! Please read our [Contribution Guidelines](https://github.com/aryansharma2206/linux-cheat-sheet/blob/main/CONTRIBUTING.md) before submitting changes.
 
-## License 📜
+---
 
-This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
+## 👨‍💻 Author
+
+**Aryan Sharma**  
+B.Tech CSE (AI & DS) | Poornima University  
+GitHub: [@AryanSharma2206](https://github.com/AryanSharma2206)  
+LinkedIn: [linkedin.com/in/aryan-sharma2206](https://www.linkedin.com/in/aryan-sharma-a2a240353/)  
+Location: Jaipur, India
+
 ```
 
-Key improvements made:
-1. Made all badges clickable with proper links
-2. Added proper GitHub Pages and version links
-3. Added a "Getting Started" section with clickable commands
-4. Added "Contributing" and "License" sections with proper links
-5. Maintained all the original content while making it more interactive
-6. Kept the mermaid diagram unchanged as it's not a link
