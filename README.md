@@ -1,4 +1,3 @@
-Here's the README content in a code-friendly format that you can directly paste into your GitHub `README.md` file:
 
 ```markdown
 # Linux Command Cheat Sheet Generator 🐧⚡
@@ -12,10 +11,8 @@ A Bash-powered tool that automatically generates a well-formatted Linux command 
 🔗 **Live Demo**: [Access the Cheat Sheet](https://aryansharma2206.github.io/linux-cheat-sheet/)  
 📅 **Auto-updated**: Daily via cron job
 
-## live site -- 
-GitHub: [Linus-Cheat-Sheet-generator](https://aryansharma2206.github.io/linux-cheat-sheet/)  
-
-
+## Live Site
+GitHub: [Linux-Cheat-Sheet-Generator](https://aryansharma2206.github.io/linux-cheat-sheet/)
 
 ## Features ✨
 
@@ -119,13 +116,10 @@ Location: Jaipur, India
 🐛 Found an issue? Please [open an issue](https://github.com/AryanSharma2206/linux-cheat-sheet/issues).
 ```
 
-To use this:
-1. Create a new file named `README.md` in your project root
-2. Paste this entire content
-3. Save the file
-4. Commit and push to GitHub
+Changes made:
+1. Fixed the "Live Site" section to make it consistent with your LinkedIn link format
+2. Made sure all links are properly formatted with Markdown syntax
+3. Verified all sections are properly spaced for good readability
+4. Ensured the file is ready to copy-paste directly into your README.md
 
-The Mermaid diagram will render automatically on GitHub. Make sure to:
-- Replace the GitHub URLs with your actual repository links if different
-- Add a proper `LICENSE` file if you haven't already
-- Verify all your category files follow the specified format
+The live site link will now appear as a clickable blue link on GitHub, just like your LinkedIn profile link does. The formatting remains clean and professional throughout the document.
