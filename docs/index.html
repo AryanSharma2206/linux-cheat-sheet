@@ -18,6 +18,10 @@
       --highlight: rgba(255, 213, 0, 0.3);
     }
     
+    * {
+      box-sizing: border-box;
+    }
+    
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background-color: var(--dark);
@@ -26,18 +30,23 @@
       margin: 0;
       padding: 0;
       display: grid;
+      grid-template-areas:
+        "header header"
+        "sidebar main"
+        "footer footer";
       grid-template-columns: var(--sidebar-width) 1fr;
+      grid-template-rows: auto 1fr auto;
       min-height: 100vh;
     }
     
     header {
+      grid-area: header;
       background: var(--primary);
       color: white;
       padding: 1rem;
       text-align: center;
       font-size: 1.5rem;
       font-weight: bold;
-      grid-column: 1 / -1;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -69,10 +78,11 @@
     }
     
     .sidebar {
+      grid-area: sidebar;
       background-color: var(--darker);
       padding: 1rem;
       overflow-y: auto;
-      height: calc(100vh - 68px);
+      height: 100%;
       position: sticky;
       top: 68px;
       border-right: 1px solid rgba(255,255,255,0.1);
@@ -130,9 +140,10 @@
     }
     
     main {
+      grid-area: main;
       padding: 1.5rem 2.5rem;
       overflow-y: auto;
-      height: calc(100vh - 68px);
+      height: 100%;
     }
     
     section {
@@ -184,7 +195,6 @@
       position: relative;
       padding-right: 80px;
       overflow-x: auto;
-      white-space: nowrap;
     }
     
     .command:hover {
@@ -227,11 +237,11 @@
     }
     
     footer {
+      grid-area: footer;
       text-align: center;
       padding: 1.2rem;
       font-size: 0.9rem;
       color: #999;
-      grid-column: 1 / -1;
       background-color: var(--darker);
       border-top: 1px solid rgba(255,255,255,0.1);
     }
@@ -281,35 +291,18 @@
       width: 18px;
       height: 18px;
     }
-    
-    @media (max-width: 768px) {
-      body {
-        grid-template-columns: 1fr;
-      }
-      
-      .sidebar {
-        display: none;
-      }
-      
-      header {
-        flex-direction: column;
-        gap: 1rem;
-        padding: 1rem;
-      }
-      
-      .search-container {
-        width: 100%;
-      }
-      
-      main {
-        padding: 1rem;
-      }
-      
-      section {
-        padding: 1.2rem;
-      }
+
+    /* Mobile menu toggle */
+    .mobile-menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 0.5rem;
     }
-    
+
     /* Animation for search results */
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
@@ -319,17 +312,144 @@
     .search-result {
       animation: fadeIn 0.3s ease-out;
     }
+
+    /* Responsive adjustments */
+    @media (max-width: 1024px) {
+      .search-container {
+        width: 250px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      body {
+        grid-template-areas:
+          "header"
+          "main"
+          "footer";
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr auto;
+      }
+      
+      header {
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 0.5rem 1rem;
+        position: sticky;
+      }
+
+      .mobile-menu-toggle {
+        display: block;
+      }
+
+      .search-container {
+        width: auto;
+        flex-grow: 1;
+        margin-left: 1rem;
+      }
+      
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 85%;
+        max-width: 300px;
+        height: 100vh;
+        z-index: 1000;
+        transition: left 0.3s ease;
+        padding-top: 68px;
+        border-right: none;
+      }
+
+      .sidebar.active {
+        left: 0;
+      }
+
+      .sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 900;
+        display: none;
+      }
+
+      .sidebar-overlay.active {
+        display: block;
+      }
+      
+      main {
+        padding: 1rem;
+        height: auto;
+      }
+      
+      section {
+        padding: 1.2rem;
+      }
+
+      .command {
+        white-space: pre-wrap;
+        word-break: break-word;
+        padding-right: 70px;
+      }
+
+      .copy-btn {
+        padding: 0.5rem;
+        opacity: 1; /* Always visible on mobile */
+      }
+    }
+
+    @media (max-width: 480px) {
+      header {
+        font-size: 1.2rem;
+      }
+
+      .search-container {
+        margin-left: 0.5rem;
+      }
+
+      #search {
+        padding: 0.5rem 0.8rem;
+      }
+
+      h2 {
+        font-size: 1.4rem;
+      }
+
+      h3 {
+        font-size: 1.2rem;
+      }
+
+      .command {
+        font-size: 0.85rem;
+        padding: 0.8rem;
+        padding-right: 60px;
+      }
+
+      .copy-btn {
+        font-size: 0.75rem;
+        padding: 0.4rem;
+      }
+
+      .sidebar {
+        width: 90%;
+      }
+    }
   </style>
 </head>
 <body>
   <header>
+    <button class="mobile-menu-toggle" id="mobileMenuToggle">☰</button>
     <div>🐧 Linux Command Cheat Sheet</div>
     <div class="search-container">
       <input type="text" id="search" placeholder="Search commands...">
     </div>
   </header>
 
-  <aside class="sidebar">
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <aside class="sidebar" id="sidebar">
     <div class="sidebar-controls">
       <div class="dark-mode-toggle" id="toggleDarkMode">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -361,7 +481,14 @@
   </aside>
 
   <main id="mainContent">
-    <!-- APACHE Section -->
+    <!-- PASTE YOUR SECTIONS HERE -->
+
+
+
+
+
+
+<!-- APACHE Section -->
     <section id="apache">
       <h2>APACHE</h2>
       
@@ -1184,6 +1311,14 @@
 </section>
 
 
+
+
+
+
+
+
+
+    <!-- They will maintain all functionality -->
   </main>
     
   <footer>
@@ -1198,31 +1333,86 @@
       setupCopyButtons();
       setupCategoryLinks();
       setupKeyboardShortcuts();
+      setupMobileMenu();
       
       // Highlight current category in sidebar
       highlightCurrentCategory();
       
       // Smooth scroll for anchor links
+      setupSmoothScrolling();
+    });
+
+    // Mobile menu functionality
+    function setupMobileMenu() {
+      const menuToggle = document.getElementById('mobileMenuToggle');
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+      
+      if (!menuToggle || !sidebar || !overlay) return;
+      
+      menuToggle.addEventListener('click', function(e) {
+        e.stopPropagation();
+        toggleMobileMenu();
+      });
+      
+      overlay.addEventListener('click', closeMobileMenu);
+      
+      function toggleMobileMenu() {
+        sidebar.classList.toggle('active');
+        overlay.classList.toggle('active');
+        document.body.classList.toggle('no-scroll', sidebar.classList.contains('active'));
+      }
+      
+      function closeMobileMenu() {
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.classList.remove('no-scroll');
+      }
+      
+      window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+          closeMobileMenu();
+        }
+      });
+    }
+
+    // Smooth scrolling for anchor links
+    function setupSmoothScrolling() {
       document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
           e.preventDefault();
-          document.querySelector(this.getAttribute('href')).scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-          });
+          const targetId = this.getAttribute('href');
+          const targetElement = document.querySelector(targetId);
+          
+          if (targetElement) {
+            targetElement.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+            
+            // Close mobile menu if open
+            closeMobileMenu();
+            
+            // Update URL without jumping
+            if (history.pushState) {
+              history.pushState(null, null, targetId);
+            } else {
+              location.hash = targetId;
+            }
+          }
         });
       });
-    });
+    }
 
     // Setup search functionality
     function setupSearch() {
       const searchInput = document.getElementById('search');
+      if (!searchInput) return;
       
       searchInput.addEventListener('input', function() {
         const searchTerm = this.value.toLowerCase().trim();
         
         if (searchTerm.length < 2) {
-          // Reset highlighting if search term is too short
           resetSearchHighlights();
           return;
         }
@@ -1230,7 +1420,6 @@
         performSearch(searchTerm);
       });
       
-      // Clear search when clicking the 'x' in search field
       searchInput.addEventListener('search', function() {
         if (this.value === '') {
           resetSearchHighlights();
@@ -1243,10 +1432,12 @@
         el.classList.remove('highlight');
         el.innerHTML = el.textContent;
       });
+      
       document.querySelectorAll('section').forEach(section => {
         section.style.display = '';
         section.classList.remove('search-result');
       });
+      
       document.querySelectorAll('.command').forEach(cmd => {
         cmd.style.display = '';
       });
@@ -1269,7 +1460,6 @@
             sectionHasResults = true;
             foundResults = true;
             
-            // Highlight matching text
             const html = command.innerHTML;
             command.innerHTML = html.replace(regex, match => 
               `<span class="highlight">${match}</span>`
@@ -1277,13 +1467,11 @@
             command.style.display = '';
             command.classList.add('search-result');
           } else {
-            // Hide non-matching commands
             command.style.display = 'none';
             command.innerHTML = command.textContent;
           }
         });
         
-        // Show/hide sections based on matches
         if (sectionHasResults) {
           section.style.display = '';
           section.classList.add('search-result');
@@ -1293,7 +1481,6 @@
         }
       });
       
-      // Show no results message if nothing found
       const noResults = document.querySelector('.no-results');
       if (!foundResults) {
         if (!noResults) {
@@ -1319,8 +1506,8 @@
     // Setup dark mode toggle
     function setupDarkModeToggle() {
       const toggleBtn = document.getElementById('toggleDarkMode');
+      if (!toggleBtn) return;
       
-      // Check for saved user preference or use system preference
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       const savedMode = localStorage.getItem('darkMode');
       
@@ -1363,7 +1550,6 @@
 
     // Setup copy buttons
     function setupCopyButtons() {
-      // Add copy buttons to all commands
       document.querySelectorAll('.command').forEach(command => {
         if (!command.querySelector('.copy-btn')) {
           const copyBtn = document.createElement('button');
@@ -1383,6 +1569,8 @@
             setTimeout(() => {
               e.target.classList.remove('copied');
             }, 2000);
+          }).catch(err => {
+            console.error('Failed to copy text: ', err);
           });
         }
       });
@@ -1391,11 +1579,13 @@
     // Setup category links in sidebar
     function setupCategoryLinks() {
       const categoryList = document.getElementById('categoryList');
+      if (!categoryList) return;
+      
       const sections = document.querySelectorAll('section');
       
       sections.forEach(section => {
         const sectionId = section.id;
-        const sectionTitle = section.querySelector('h2').textContent;
+        const sectionTitle = section.querySelector('h2')?.textContent;
         
         if (sectionId && sectionTitle) {
           const listItem = document.createElement('li');
@@ -1411,13 +1601,19 @@
         // Focus search when pressing / (like Vim)
         if (e.key === '/' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
           e.preventDefault();
-          document.getElementById('search').focus();
+          const searchInput = document.getElementById('search');
+          if (searchInput) {
+            searchInput.focus();
+          }
         }
         
         // Clear search with Esc
-        if (e.key === 'Escape' && document.getElementById('search').value) {
-          document.getElementById('search').value = '';
-          resetSearchHighlights();
+        if (e.key === 'Escape') {
+          const searchInput = document.getElementById('search');
+          if (searchInput && searchInput.value) {
+            searchInput.value = '';
+            resetSearchHighlights();
+          }
         }
       });
     }
@@ -1425,9 +1621,7 @@
     // Highlight current category in sidebar
     function highlightCurrentCategory() {
       const links = document.querySelectorAll('.category-list a');
-      
-      window.addEventListener('hashchange', updateActiveLink);
-      window.addEventListener('load', updateActiveLink);
+      if (!links.length) return;
       
       function updateActiveLink() {
         const currentHash = window.location.hash;
@@ -1442,6 +1636,18 @@
           }
         });
       }
+      
+      window.addEventListener('hashchange', updateActiveLink);
+      window.addEventListener('load', updateActiveLink);
+    }
+
+    // Helper function to close mobile menu
+    function closeMobileMenu() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+      if (sidebar) sidebar.classList.remove('active');
+      if (overlay) overlay.classList.remove('active');
+      document.body.classList.remove('no-scroll');
     }
   </script>
 </body>
