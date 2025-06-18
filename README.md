@@ -116,10 +116,3 @@ Location: Jaipur, India
 🐛 Found an issue? Please [open an issue](https://github.com/AryanSharma2206/linux-cheat-sheet/issues).
 ```
 
-Changes made:
-1. Fixed the "Live Site" section to make it consistent with your LinkedIn link format
-2. Made sure all links are properly formatted with Markdown syntax
-3. Verified all sections are properly spaced for good readability
-4. Ensured the file is ready to copy-paste directly into your README.md
-
-The live site link will now appear as a clickable blue link on GitHub, just like your LinkedIn profile link does. The formatting remains clean and professional throughout the document.
