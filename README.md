@@ -1,28 +1,38 @@
+🐧⚡ Linux Command Cheat Sheet Generator
 
 
-```markdown
-# Linux Command Cheat Sheet Generator 🐧⚡
 
-![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Deployed-brightgreen)
-![Version](https://img.shields.io/badge/Version-1.0-orange)
+A Bash-powered tool that automatically generates a well-formatted Linux command cheat sheet from categorized command files.
 
-A Bash-powered tool that automatically generates a well-formatted Linux command cheat sheet from categorized command lists.
+📌 Live Demo:
+👉 Access the Cheat Sheet
 
-🔗 **Live Demo**: [Access the Cheat Sheet](https://aryansharma2206.github.io/linux-cheat-sheet/)  
-📅 **Auto-updated**: Daily via cron job
+📅 Auto-updated:
+Runs daily via cron job to reflect the latest command sets.
 
-## Features ✨
+🚀 Features
+🗂️ Categorized Commands
+Commands are grouped by topics (e.g., Docker, systemd, networking, etc.)
 
-- 🗂️ **Categorized Commands**: Organized by topics (Docker, systemd, networking, etc.)
-- 📝 **Markdown Formatting**: Clean, readable output with consistent styling
-- 🔍 **Search-Friendly**: Structured for quick command lookup
-- 🤖 **Automated Generation**: Runs daily via cron job
-- 🌐 **Web Accessible**: GitHub Pages hosting makes it always available
-- 📱 **Responsive Design**: Works on both desktop and mobile devices
+📝 Markdown Formatting
+Generates clean, readable Markdown output
 
-## How It Works 🔧
+🔍 Search-Friendly
+Easily locate commands by category or keyword
 
-```mermaid
+🤖 Automated Generation
+Powered by a daily cron job running the Bash script
+
+🌐 Web Accessible
+Hosted using GitHub Pages for quick access
+
+📱 Responsive Design
+Works well on desktop and mobile devices
+
+🛠️ How It Works
+mermaid
+Copy
+Edit
 flowchart TD
     A[START] --> B{Trigger}
     B -->|Manual| C[generate_cheatsheet.sh]
@@ -31,86 +41,25 @@ flowchart TD
     D --> E[Process each file]
     E --> F[Generate Markdown]
     F --> G[Linux_Cheat_Sheet.md]
-    G --> H[GitHub Pages]
+    G --> H[Push to GitHub Pages]
     H --> I[Auto-deploy HTML]
-```
-
-## Project Structure 📂
-
-```
+📂 Repository Structure
+Copy
+Edit
 linux-cheat-sheet/
-├── categories/          # Command category files (.txt)
-├── docs/                # GitHub Pages output
-│   └── index.html       # Auto-generated HTML
-├── generate_cheatsheet.sh # Main generation script
-└── Linux_Cheat_Sheet.md # Generated cheat sheet
-```
-
-## Installation & Usage 🛠️
-
-### Local Setup
-```bash
-git clone https://github.com/AryanSharma2206/linux-cheat-sheet.git
-cd linux-cheat-sheet
-chmod +x generate_cheatsheet.sh
-./generate_cheatsheet.sh
-```
-
-### Schedule Automatic Updates (Linux/macOS)
-1. Edit crontab:
-```bash
-crontab -e
-```
-2. Add this line for daily updates at midnight:
-```
-0 0 * * * /path/to/linux-cheat-sheet/generate_cheatsheet.sh
-```
-
-## Customizing Commands ✏️
-
-1. Edit or add `.txt` files in the `categories/` directory
-2. Format:
-```
-# Command Description
-command --flags
-```
-
-Example (`categories/docker.txt`):
-```
-# List running containers
-docker ps
-
-# Remove stopped containers
-docker container prune
-```
-
-## Contributing 🤝
-
-1. Fork the repository
-2. Add/improve commands in relevant category files
-3. Submit a pull request
-
-## Roadmap 🚀
-
-- [x] Version 1: Bash-based generator (current)
-- [ ] Version 2: Flask web interface
-- [ ] Add command search functionality
-- [ ] Include usage examples
-
-
----
-
-## 👨‍💻 Author
-
-**Aryan Sharma**  
-B.Tech CSE (AI & DS) | Poornima University  
-GitHub: [@AryanSharma2206](https://github.com/AryanSharma2206)  
-LinkedIn: [linkedin.com/in/aryan-sharma2206](https://www.linkedin.com/in/aryan-sharma-a2a240353/)  
-Location: Jaipur, India
-
-
-💡 **Pro Tip**: Bookmark the [live version](https://aryansharma2206.github.io/linux-cheat-sheet/) for quick access!
-
-🐛 Found an issue? Please [open an issue](https://github.com/AryanSharma2206/linux-cheat-sheet/issues).
-```
-
+├── categories/
+│   ├── docker.txt
+│   ├── apache.txt
+│   └── ...
+├── generate_cheatsheet.sh
+├── Linux_Cheat_Sheet.md
+├── index.html
+└── .github/
+    └── workflows/
+        └── cron.yml
+👨‍💻 Author
+Aryan Sharma
+B.Tech CSE (AI & DS) | Poornima University
+📍 Jaipur, India
+🔗 GitHub @AryanSharma2206
+🔗 LinkedIn
