@@ -98,11 +98,6 @@ docker container prune
 - [ ] Add command search functionality
 - [ ] Include usage examples
 
-## License 📜
-
-MIT License - See [LICENSE](LICENSE) for details.
-
----
 
 ---
 
