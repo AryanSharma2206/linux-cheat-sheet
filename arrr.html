@@ -1,0 +1,1654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Linux Command Cheat Sheet</title>
+  <style>
+    :root {
+      --primary: #007acc;
+      --secondary: #61dafb;
+      --dark: #1e1e1e;
+      --darker: #161616;
+      --light: #d4d4d4;
+      --lighter: #ffffff;
+      --code-bg: #252526;
+      --code-color: #dcdcaa;
+      --sidebar-width: 250px;
+      --highlight: rgba(255, 213, 0, 0.3);
+    }
+    
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--dark);
+      color: var(--light);
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      grid-template-areas:
+        "header header"
+        "sidebar main"
+        "footer footer";
+      grid-template-columns: var(--sidebar-width) 1fr;
+      grid-template-rows: auto 1fr auto;
+      min-height: 100vh;
+    }
+    
+    header {
+      grid-area: header;
+      background: var(--primary);
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+    
+    .search-container {
+      width: 300px;
+      position: relative;
+    }
+    
+    #search {
+      width: 100%;
+      padding: 0.6rem 1rem;
+      border-radius: 25px;
+      border: none;
+      background: rgba(255,255,255,0.9);
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    #search:focus {
+      outline: 2px solid var(--secondary);
+      box-shadow: 0 0 0 3px rgba(97, 218, 251, 0.3);
+    }
+    
+    .sidebar {
+      grid-area: sidebar;
+      background-color: var(--darker);
+      padding: 1rem;
+      overflow-y: auto;
+      height: 100%;
+      position: sticky;
+      top: 68px;
+      border-right: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .sidebar-controls {
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .sidebar h3 {
+      color: var(--secondary);
+      margin-top: 1rem;
+      margin-bottom: 0.5rem;
+      padding-bottom: 0.3rem;
+      border-bottom: 1px solid var(--primary);
+      font-size: 1.1rem;
+    }
+    
+    .category-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      flex-grow: 1;
+      overflow-y: auto;
+    }
+    
+    .category-list li {
+      margin-bottom: 0.5rem;
+    }
+    
+    .category-list a {
+      color: var(--light);
+      text-decoration: none;
+      display: block;
+      padding: 0.5rem 0.8rem;
+      border-radius: 6px;
+      transition: all 0.2s;
+      font-size: 0.95rem;
+    }
+    
+    .category-list a:hover {
+      background-color: rgba(0, 122, 204, 0.2);
+      color: var(--secondary);
+      transform: translateX(3px);
+    }
+    
+    .category-list a.active {
+      background-color: var(--primary);
+      color: white;
+      font-weight: 500;
+    }
+    
+    main {
+      grid-area: main;
+      padding: 1.5rem 2.5rem;
+      overflow-y: auto;
+      height: 100%;
+    }
+    
+    section {
+      margin-bottom: 2.5rem;
+      background-color: var(--darker);
+      border-radius: 10px;
+      padding: 1.8rem;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      border-left: 4px solid var(--primary);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    section:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+    }
+    
+    h2 {
+      color: var(--secondary);
+      margin-top: 0;
+      margin-bottom: 1.2rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--primary);
+      font-size: 1.6rem;
+      display: flex;
+      align-items: center;
+    }
+    
+    h2::before {
+      content: "#";
+      margin-right: 0.5rem;
+      color: var(--primary);
+      font-weight: normal;
+    }
+    
+    h3 {
+      color: var(--secondary);
+      margin: 1.5rem 0 1rem 0;
+      font-size: 1.3rem;
+    }
+    
+    .command {
+      background: var(--code-bg);
+      padding: 1rem;
+      margin: 0.5rem 0;
+      border-radius: 6px;
+      font-family: 'Fira Code', 'Courier New', monospace;
+      font-size: 0.95rem;
+      position: relative;
+      padding-right: 80px;
+      overflow-x: auto;
+    }
+    
+    .command:hover {
+      background-color: rgba(97, 218, 251, 0.1);
+    }
+    
+    .copy-btn {
+      position: absolute;
+      right: 0;
+      top: 0;
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: var(--light);
+      padding: 0.5rem 1rem;
+      border-radius: 0 6px 6px 0;
+      cursor: pointer;
+      font-size: 0.85rem;
+      opacity: 0;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      height: 100%;
+    }
+    
+    .command:hover .copy-btn {
+      opacity: 1;
+    }
+    
+    .copy-btn:hover {
+      background: var(--primary);
+      color: white;
+    }
+    
+    .copy-btn::before {
+      content: "Copy";
+    }
+    
+    .copy-btn.copied::before {
+      content: "Copied!";
+    }
+    
+    footer {
+      grid-area: footer;
+      text-align: center;
+      padding: 1.2rem;
+      font-size: 0.9rem;
+      color: #999;
+      background-color: var(--darker);
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    a {
+      color: var(--secondary);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    
+    a:hover {
+      color: var(--primary);
+      text-decoration: underline;
+    }
+    
+    .no-results {
+      text-align: center;
+      padding: 3rem;
+      color: #999;
+      font-style: italic;
+      font-size: 1.1rem;
+    }
+    
+    .highlight {
+      background-color: var(--highlight);
+      padding: 0 2px;
+      border-radius: 3px;
+      font-weight: bold;
+      color: var(--code-color);
+    }
+    
+    .dark-mode-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    
+    .dark-mode-toggle:hover {
+      background-color: rgba(255,255,255,0.1);
+    }
+    
+    .dark-mode-toggle svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* Mobile menu toggle */
+    .mobile-menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 0.5rem;
+    }
+
+    /* Animation for search results */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .search-result {
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 1024px) {
+      .search-container {
+        width: 250px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      body {
+        grid-template-areas:
+          "header"
+          "main"
+          "footer";
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr auto;
+      }
+      
+      header {
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 0.5rem 1rem;
+        position: sticky;
+      }
+
+      .mobile-menu-toggle {
+        display: block;
+      }
+
+      .search-container {
+        width: auto;
+        flex-grow: 1;
+        margin-left: 1rem;
+      }
+      
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 85%;
+        max-width: 300px;
+        height: 100vh;
+        z-index: 1000;
+        transition: left 0.3s ease;
+        padding-top: 68px;
+        border-right: none;
+      }
+
+      .sidebar.active {
+        left: 0;
+      }
+
+      .sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 900;
+        display: none;
+      }
+
+      .sidebar-overlay.active {
+        display: block;
+      }
+      
+      main {
+        padding: 1rem;
+        height: auto;
+      }
+      
+      section {
+        padding: 1.2rem;
+      }
+
+      .command {
+        white-space: pre-wrap;
+        word-break: break-word;
+        padding-right: 70px;
+      }
+
+      .copy-btn {
+        padding: 0.5rem;
+        opacity: 1; /* Always visible on mobile */
+      }
+    }
+
+    @media (max-width: 480px) {
+      header {
+        font-size: 1.2rem;
+      }
+
+      .search-container {
+        margin-left: 0.5rem;
+      }
+
+      #search {
+        padding: 0.5rem 0.8rem;
+      }
+
+      h2 {
+        font-size: 1.4rem;
+      }
+
+      h3 {
+        font-size: 1.2rem;
+      }
+
+      .command {
+        font-size: 0.85rem;
+        padding: 0.8rem;
+        padding-right: 60px;
+      }
+
+      .copy-btn {
+        font-size: 0.75rem;
+        padding: 0.4rem;
+      }
+
+      .sidebar {
+        width: 90%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <button class="mobile-menu-toggle" id="mobileMenuToggle">☰</button>
+    <div>🐧 Linux Command Cheat Sheet</div>
+    <div class="search-container">
+      <input type="text" id="search" placeholder="Search commands...">
+    </div>
+  </header>
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-controls">
+      <div class="dark-mode-toggle" id="toggleDarkMode">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <span>Toggle Theme</span>
+      </div>
+    </div>
+    
+    <h3>Categories</h3>
+    <ul class="category-list" id="categoryList">
+      <!-- Categories will be added dynamically -->
+    </ul>
+    
+    <h3>Quick Reference</h3>
+    <ul class="category-list">
+      <li><a href="#file-permissions">File Permissions</a></li>
+      <li><a href="#common-ports">Common Ports</a></li>
+      <li><a href="#system-info">System Info</a></li>
+    </ul>
+  </aside>
+
+  <main id="mainContent">
+    <!-- PASTE YOUR SECTIONS HERE -->
+
+
+
+
+
+
+<!-- APACHE Section -->
+    <section id="apache">
+      <h2>APACHE</h2>
+      
+      <h3>Commands</h3>
+      <div class="command">apachectl -t : Test configuration</div>
+      <div class="command">apachectl restart : Restart service</div>
+      <div class="command">apachectl graceful : Graceful restart</div>
+      <div class="command">apachectl stop : Stop service</div>
+      <div class="command">systemctl start apache2 : Start (systemd)</div>
+      <div class="command">systemctl status apache2 : Check status</div>
+
+      <h3>Common Directories</h3>
+      <div class="command">/etc/apache2 : Configuration (Debian)</div>
+      <div class="command">/etc/httpd : Configuration (RHEL)</div>
+      <div class="command">/var/www/html : Default web root</div>
+      <div class="command">/var/log/apache2 : Log files (Debian)</div>
+      <div class="command">/var/log/httpd : Log files (RHEL)</div>
+
+      <h3>Log Monitoring</h3>
+      <div class="command">tail -f /var/log/apache2/access.log</div>
+      <div class="command">tail -f /var/log/apache2/error.log</div>
+
+      <h3>Configuration Tips</h3>
+      <div class="command">Virtual hosts in /etc/apache2/sites-available/</div>
+      <div class="command">Enable site: a2ensite example.com</div>
+      <div class="command">Disable site: a2dissite example.com</div>
+      <div class="command">Modules: a2enmod, a2dismod</div>
+    </section>
+
+    <!-- BASE Section -->
+    <section id="base">
+      <h2>BASE</h2>
+      
+      <h3>Basic Linux Commands</h3>
+      <div class="command">pwd : Print working directory</div>
+      <div class="command">ls : List directory contents</div>
+      <div class="command">ls -l : Long listing format</div>
+      <div class="command">ls -a : Show hidden files</div>
+      <div class="command">cd : Change directory</div>
+      <div class="command">cd ~ : Go to home directory</div>
+      <div class="command">cd - : Go to previous directory</div>
+      <div class="command">cp : Copy files or directories</div>
+      <div class="command">cp -r : Recursive copy (for directories)</div>
+      <div class="command">mv : Move/rename files</div>
+      <div class="command">rm : Remove files</div>
+      <div class="command">rm -rf : Force recursive removal (dangerous)</div>
+      <div class="command">mkdir : Create directory</div>
+      <div class="command">rmdir : Remove empty directory</div>
+      <div class="command">cat : Display file contents</div>
+      <div class="command">less : View file page by page</div>
+      <div class="command">head : Show first lines of file</div>
+      <div class="command">tail : Show last lines of file</div>
+      <div class="command">tail -f : Follow log file</div>
+      <div class="command">grep : Search text patterns</div>
+      <div class="command">grep -r : Recursive search</div>
+      <div class="command">find : Search for files</div>
+      <div class="command">find . -name "*.txt" : Find all txt files</div>
+      <div class="command">chmod : Change file permissions</div>
+      <div class="command">chown : Change file owner</div>
+      <div class="command">tar : Archive files</div>
+      <div class="command">tar -czvf : Create gzipped tar archive</div>
+      <div class="command">tar -xzvf : Extract gzipped tar archive</div>
+      <div class="command">df : Disk space usage</div>
+      <div class="command">du : Directory space usage</div>
+      <div class="command">du -sh : Human-readable summary</div>
+      <div class="command">top : Display processes</div>
+      <div class="command">htop : Interactive process viewer</div>
+      <div class="command">ps : Process status</div>
+      <div class="command">ps aux : Show all processes</div>
+      <div class="command">kill : Terminate process</div>
+      <div class="command">kill -9 : Force kill</div>
+    </section>
+
+    <!-- DOCKER Section -->
+    <section id="docker">
+      <h2>DOCKER</h2>
+      
+      <h3>Commands</h3>
+      <div class="command">docker ps : List running containers</div>
+      <div class="command">docker ps -a : List all containers</div>
+      <div class="command">docker images : List images</div>
+      <div class="command">docker run : Run a container</div>
+      <div class="command">docker run -it : Interactive terminal</div>
+      <div class="command">docker run -d : Detached mode</div>
+      <div class="command">docker run -p 8080:80 : Port mapping</div>
+      <div class="command">docker stop : Stop container</div>
+      <div class="command">docker start : Start stopped container</div>
+      <div class="command">docker rm : Remove container</div>
+      <div class="command">docker rm -f : Force remove running container</div>
+      <div class="command">docker rmi : Remove image</div>
+      <div class="command">docker build : Build image from Dockerfile</div>
+      <div class="command">docker pull : Pull image from registry</div>
+      <div class="command">docker push : Push image to registry</div>
+      <div class="command">docker logs : View container logs</div>
+      <div class="command">docker logs -f : Follow log output</div>
+      <div class="command">docker exec : Execute command in running container</div>
+      <div class="command">docker exec -it /bin/bash : Get shell in container</div>
+      <div class="command">docker volume : Manage volumes</div>
+      <div class="command">docker network : Manage networks</div>
+      <div class="command">docker-compose up : Start services</div>
+      <div class="command">docker-compose down : Stop services</div>
+      <div class="command">docker system prune : Clean up unused objects</div>
+      <div class="command">docker info : Display system information</div>
+    </section>
+
+    <!-- FILE PERMISSIONS Section -->
+    <section id="file-permissions">
+      <h2>FILE PERMISSIONS</h2>
+      
+      <h3>Common Permission Values</h3>
+      <div class="command">chmod 400 file : Read by owner only</div>
+      <div class="command">chmod 600 file : Read/write by owner only</div>
+      <div class="command">chmod 644 file : Owner read/write, others read</div>
+      <div class="command">chmod 755 file : Owner read/write/execute, others read/execute</div>
+      <div class="command">chmod 777 file : Read/write/execute for everyone (dangerous)</div>
+      
+      <h3>Symbolic Permissions</h3>
+      <div class="command">chmod u+x file : Add execute for owner</div>
+      <div class="command">chmod g-w file : Remove write for group</div>
+      <div class="command">chmod o=r file : Others can only read</div>
+      <div class="command">chmod a+x file : Add execute for all (a = all)</div>
+    </section>
+
+    <!-- COMMON PORTS Section -->
+    <section id="common-ports">
+      <h2>COMMON PORTS</h2>
+      
+      <div class="command">20/21 : FTP</div>
+      <div class="command">22 : SSH</div>
+      <div class="command">25 : SMTP</div>
+      <div class="command">53 : DNS</div>
+      <div class="command">80 : HTTP</div>
+      <div class="command">110 : POP3</div>
+      <div class="command">143 : IMAP</div>
+      <div class="command">443 : HTTPS</div>
+      <div class="command">3306 : MySQL</div>
+      <div class="command">5432 : PostgreSQL</div>
+      <div class="command">6379 : Redis</div>
+      <div class="command">8080 : HTTP Alt</div>
+      <div class="command">27017 : MongoDB</div>
+    </section>
+
+    <!-- SYSTEM INFO Section -->
+    <section id="system-info">
+      <h2>SYSTEM INFO</h2>
+      
+      <h3>Hardware Information</h3>
+      <div class="command">lscpu : CPU information</div>
+      <div class="command">free -h : Memory usage</div>
+      <div class="command">df -h : Disk space</div>
+      <div class="command">lspci : List PCI devices</div>
+      <div class="command">lsusb : List USB devices</div>
+      
+      <h3>System Information</h3>
+      <div class="command">uname -a : Kernel info</div>
+      <div class="command">hostnamectl : Hostname and OS info</div>
+      <div class="command">uptime : System uptime</div>
+      <div class="command">who : Logged in users</div>
+      <div class="command">w : Who is logged in and what they're doing</div>
+    </section>
+
+<!-- FILESYSTEM Section -->
+<section id="filesystem">
+  <h2>FILESYSTEM</h2>
+  
+  <h3>Mounting and Unmounting</h3>
+  <div class="command">mount : Mount filesystem</div>
+  <div class="command">mount -a : Mount all in fstab</div>
+  <div class="command">umount : Unmount filesystem</div>
+  
+  <h3>Disk Usage</h3>
+  <div class="command">df : Disk space usage</div>
+  <div class="command">df -h : Human-readable</div>
+  <div class="command">du : Directory space usage</div>
+  <div class="command">du -sh * : Summary per directory</div>
+  
+  <h3>Partition Management</h3>
+  <div class="command">lsblk : List block devices</div>
+  <div class="command">blkid : Show block device attributes</div>
+  <div class="command">fdisk : Partition table manipulator</div>
+  <div class="command">parted : Advanced partition tool</div>
+  
+  <h3>Filesystem Operations</h3>
+  <div class="command">mkfs : Create filesystem</div>
+  <div class="command">mkfs.ext4 : Create ext4 fs</div>
+  <div class="command">fsck : Filesystem check</div>
+  <div class="command">fsck -y : Auto-repair</div>
+  <div class="command">tune2fs : Tune ext filesystem</div>
+  
+  <h3>Advanced Operations</h3>
+  <div class="command">dd : Low-level copy</div>
+  <div class="command">dd if=/dev/zero of=file bs=1M count=100</div>
+  <div class="command">ln : Create links</div>
+  <div class="command">ln -s : Symbolic link</div>
+  <div class="command">findmnt : Show mounted filesystems</div>
+</section>
+
+<!-- GIT Section -->
+<section id="git">
+  <h2>GIT</h2>
+  
+  <h3>Repository Basics</h3>
+  <div class="command">git init : Initialize new repository</div>
+  <div class="command">git clone : Clone a repository</div>
+  <div class="command">git status : Show working tree status</div>
+  
+  <h3>Staging and Committing</h3>
+  <div class="command">git add : Add files to staging</div>
+  <div class="command">git add . : Add all files</div>
+  <div class="command">git commit : Commit changes</div>
+  <div class="command">git commit -m "message" : Commit with message</div>
+  
+  <h3>Remote Operations</h3>
+  <div class="command">git push : Push to remote repository</div>
+  <div class="command">git pull : Fetch and merge from remote</div>
+  
+  <h3>Branching</h3>
+  <div class="command">git branch : List/create branches</div>
+  <div class="command">git branch -d : Delete branch</div>
+  <div class="command">git checkout : Switch branches</div>
+  <div class="command">git checkout -b : Create and switch to new branch</div>
+  
+  <h3>Merging and Rebasing</h3>
+  <div class="command">git merge : Merge branches</div>
+  <div class="command">git rebase : Reapply commits on top of another branch</div>
+  
+  <h3>History and Inspection</h3>
+  <div class="command">git log : Show commit logs</div>
+  <div class="command">git log --oneline : Compact log view</div>
+  <div class="command">git diff : Show changes</div>
+  
+  <h3>Miscellaneous</h3>
+  <div class="command">git stash : Stash changes temporarily</div>
+  <div class="command">git remote : Manage remote repositories</div>
+  <div class="command">git reset : Reset current HEAD</div>
+  <div class="command">git reset --hard : Discard all changes</div>
+  <div class="command">git tag : Create/list tags</div>
+  <div class="command">git config : Configure settings</div>
+</section>
+
+<!-- JOURNALCTL Section -->
+<section id="journalctl">
+  <h2>JOURNALCTL</h2>
+  
+  <h3>Basic Log Viewing</h3>
+  <div class="command">journalctl : Show all logs</div>
+  <div class="command">journalctl -u : Show logs for service</div>
+  <div class="command">journalctl -u nginx : Example for nginx</div>
+  <div class="command">journalctl -f : Follow logs (tail -f)</div>
+  
+  <h3>Boot-Specific Logs</h3>
+  <div class="command">journalctl -b : Current boot logs</div>
+  <div class="command">journalctl -k : Kernel messages</div>
+  
+  <h3>Time Filtering</h3>
+  <div class="command">journalctl --since : Filter by time</div>
+  <div class="command">journalctl --since "2023-01-01" : Specific date</div>
+  <div class="command">journalctl --since "1 hour ago" : Relative time</div>
+  <div class="command">journalctl --until : Filter end time</div>
+  
+  <h3>Priority Filtering</h3>
+  <div class="command">journalctl -p : Priority filter</div>
+  <div class="command">journalctl -p err : Only errors</div>
+  
+  <h3>Output Control</h3>
+  <div class="command">journalctl -n : Show n entries</div>
+  <div class="command">journalctl -n 50 : Show last 50 entries</div>
+  <div class="command">journalctl --no-pager : Disable pager</div>
+  <div class="command">journalctl -o : Output format</div>
+  <div class="command">journalctl -o json : JSON format</div>
+  
+  <h3>Log Maintenance</h3>
+  <div class="command">journalctl --disk-usage : Show log size</div>
+  <div class="command">journalctl --vacuum-size= : Clean logs</div>
+  <div class="command">journalctl --vacuum-size=500M : Keep 500MB of logs</div>
+</section>
+
+<!-- Add the remaining sections following the same pattern -->
+<!-- NETWORKING Section -->
+<section id="networking">
+  <h2>NETWORKING</h2>
+  
+  <h3>Interface Configuration</h3>
+  <div class="command">ip addr : Show IP addresses (modern)</div>
+  <div class="command">ifconfig : Show network interfaces (deprecated)</div>
+  
+  <h3>Connectivity Testing</h3>
+  <div class="command">ping : Test network connectivity</div>
+  <div class="command">ping -c 4 : Send 4 packets</div>
+  <div class="command">traceroute : Trace network path</div>
+  <div class="command">mtr : Network diagnostic tool</div>
+  
+  <h3>Port and Connection Info</h3>
+  <div class="command">netstat : Network statistics</div>
+  <div class="command">netstat -tulnp : Show listening ports</div>
+  <div class="command">ss : Socket statistics (modern netstat)</div>
+  <div class="command">ss -tulnp : Show listening ports</div>
+  
+  <h3>DNS Operations</h3>
+  <div class="command">dig : DNS lookup</div>
+  <div class="command">nslookup : DNS query tool</div>
+  <div class="command">whois : Domain information</div>
+  <div class="command">host : DNS lookup utility</div>
+  
+  <h3>Routing</h3>
+  <div class="command">route : Show routing table</div>
+  <div class="command">route -n : Numerical addresses</div>
+  
+  <h3>Wireless</h3>
+  <div class="command">iwconfig : Wireless interface config</div>
+  <div class="command">nmcli : NetworkManager command line</div>
+  
+  <h3>File Transfer</h3>
+  <div class="command">curl : Transfer data from URLs</div>
+  <div class="command">curl -I : Show headers only</div>
+  <div class="command">wget : Download files</div>
+  <div class="command">wget -c : Continue interrupted download</div>
+  <div class="command">scp : Secure copy between hosts</div>
+  <div class="command">rsync : Remote file sync</div>
+  <div class="command">rsync -avz : Archive, verbose, compress</div>
+  
+  <h3>Advanced Tools</h3>
+  <div class="command">nc/netcat : Network swiss army knife</div>
+  <div class="command">tcpdump : Network packet analyzer</div>
+  <div class="command">tcpdump -i eth0 : Capture on interface</div>
+</section>
+
+
+<!-- NGINX Section -->
+<section id="nginx">
+  <h2>NGINX</h2>
+  
+  <h3>Service Management</h3>
+  <div class="command">nginx -t : Test configuration</div>
+  <div class="command">nginx -s reload : Reload config</div>
+  <div class="command">nginx -s stop : Fast shutdown</div>
+  <div class="command">systemctl start nginx : Start service</div>
+  <div class="command">systemctl stop nginx : Stop service</div>
+  <div class="command">systemctl restart nginx : Restart service</div>
+  <div class="command">systemctl status nginx : Check status</div>
+
+  <h3>Important Directories</h3>
+  <div class="command">/etc/nginx : Configuration</div>
+  <div class="command">/var/log/nginx : Log files</div>
+  <div class="command">/usr/share/nginx/html : Default web root</div>
+
+  <h3>Log Monitoring</h3>
+  <div class="command">tail -f /var/log/nginx/access.log</div>
+  <div class="command">tail -f /var/log/nginx/error.log</div>
+
+  <h3>Configuration Tips</h3>
+  <div class="command">server blocks in /etc/nginx/sites-available/</div>
+  <div class="command">ln -s /etc/nginx/sites-available/example /etc/nginx/sites-enabled/ : Enable site</div>
+</section>
+
+<!-- PACKAGE-MANAGERS Section -->
+<section id="package-managers">
+  <h2>PACKAGE MANAGERS</h2>
+  
+  <h3>APT (Debian/Ubuntu)</h3>
+  <div class="command">apt update : Update package list</div>
+  <div class="command">apt upgrade : Upgrade packages</div>
+  <div class="command">apt install : Install package</div>
+  <div class="command">apt remove : Remove package</div>
+  <div class="command">apt purge : Remove with configs</div>
+  <div class="command">apt search : Search packages</div>
+  <div class="command">apt show : Show package info</div>
+  <div class="command">apt list --installed : List installed</div>
+  <div class="command">apt autoremove : Remove unused packages</div>
+
+  <h3>YUM/DNF (RHEL/Fedora)</h3>
+  <div class="command">dnf install : Install package</div>
+  <div class="command">dnf remove : Remove package</div>
+  <div class="command">dnf update : Update packages</div>
+  <div class="command">dnf search : Search packages</div>
+  <div class="command">dnf info : Show package info</div>
+  <div class="command">dnf list installed : List installed</div>
+
+  <h3>Pacman (Arch)</h3>
+  <div class="command">pacman -S : Install package</div>
+  <div class="command">pacman -R : Remove package</div>
+  <div class="command">pacman -Syu : Full system upgrade</div>
+  <div class="command">pacman -Qs : Search installed</div>
+  <div class="command">pacman -Si : Show package info</div>
+
+  <h3>Snap</h3>
+  <div class="command">snap install : Install snap</div>
+  <div class="command">snap remove : Remove snap</div>
+  <div class="command">snap list : List installed</div>
+  <div class="command">snap refresh : Update snaps</div>
+
+  <h3>Flatpak</h3>
+  <div class="command">flatpak install : Install package</div>
+  <div class="command">flatpak uninstall : Remove package</div>
+  <div class="command">flatpak list : List installed</div>
+  <div class="command">flatpak update : Update packages</div>
+</section>
+
+<!-- PERMISSIONS Section -->
+<section id="permissions">
+  <h2>PERMISSIONS</h2>
+  
+  <h3>Basic Permissions</h3>
+  <div class="command">chmod 755 : rwxr-xr-x</div>
+  <div class="command">chmod +x : Add execute permission</div>
+  <div class="command">chmod -R : Recursive change</div>
+  <div class="command">chown user:group : Change owner and group</div>
+  <div class="command">chown -R : Recursive owner change</div>
+  <div class="command">chgrp : Change group ownership</div>
+
+  <h3>Advanced Controls</h3>
+  <div class="command">umask : Set default permissions</div>
+  <div class="command">stat -c %a : Show octal permissions</div>
+  <div class="command">getfacl : View ACLs</div>
+  <div class="command">setfacl -m u:user:rwx : Add user ACL</div>
+  <div class="command">setfacl -x u:user : Remove user ACL</div>
+
+  <h3>User/Group Info</h3>
+  <div class="command">id : Show user/group IDs</div>
+  <div class="command">groups : Show user's groups</div>
+  <div class="command">newgrp : Temporarily change primary group</div>
+</section>
+
+<!-- SSH Section -->
+<section id="ssh">
+  <h2>SSH</h2>
+  
+  <h3>Basic Connections</h3>
+  <div class="command">ssh user@host : Connect to remote host</div>
+  <div class="command">ssh -p 2222 : Custom port</div>
+  <div class="command">ssh -v : Verbose mode</div>
+
+  <h3>Key Management</h3>
+  <div class="command">ssh-keygen -t rsa -b 4096 : Create key pair</div>
+  <div class="command">ssh-copy-id user@host : Copy key to remote</div>
+  <div class="command">ssh-agent : Manage keys</div>
+  <div class="command">ssh-add : Add keys to agent</div>
+
+  <h3>File Transfer</h3>
+  <div class="command">scp file user@host:path : Secure copy</div>
+  <div class="command">sftp user@host : Secure FTP</div>
+
+  <h3>Port Forwarding</h3>
+  <div class="command">ssh -D 1080 : SOCKS proxy</div>
+  <div class="command">ssh -L : Local port forwarding</div>
+  <div class="command">ssh -R : Remote port forwarding</div>
+  <div class="command">ssh -X : X11 forwarding</div>
+
+  <h3>Configuration</h3>
+  <div class="command">~/.ssh/config : Client config</div>
+  <div class="command">/etc/ssh/sshd_config : Server config</div>
+</section>
+
+<!-- SYSTEMD Section -->
+<section id="systemd">
+  <h2>SYSTEMD</h2>
+  
+  <h3>Service Management</h3>
+  <div class="command">systemctl start : Start service</div>
+  <div class="command">systemctl stop : Stop service</div>
+  <div class="command">systemctl restart : Restart service</div>
+  <div class="command">systemctl reload : Reload configuration</div>
+  <div class="command">systemctl status : Check service status</div>
+
+  <h3>Boot Configuration</h3>
+  <div class="command">systemctl enable : Enable at boot</div>
+  <div class="command">systemctl disable : Disable at boot</div>
+  <div class="command">systemctl is-enabled : Check boot status</div>
+  <div class="command">systemctl mask : Completely disable</div>
+  <div class="command">systemctl unmask : Remove mask</div>
+
+  <h3>System Inspection</h3>
+  <div class="command">systemctl list-units : List all units</div>
+  <div class="command">systemctl list-units --type=service : List services</div>
+  <div class="command">systemctl list-timers : List timers</div>
+  <div class="command">systemctl daemon-reload : Reload config</div>
+</section>
+
+<!-- TMUX Section -->
+<section id="tmux">
+  <h2>TMUX</h2>
+  
+  <h3>Sessions</h3>
+  <div class="command">tmux new -s name : New named session</div>
+  <div class="command">tmux ls : List sessions</div>
+  <div class="command">tmux attach -t name : Attach to session</div>
+  <div class="command">tmux kill-session -t name : Kill session</div>
+
+  <h3>Windows (Prefix +)</h3>
+  <div class="command">c : Create window</div>
+  <div class="command">n : Next window</div>
+  <div class="command">p : Previous window</div>
+  <div class="command">& : Kill window</div>
+  <div class="command">, : Rename window</div>
+
+  <h3>Panes (Prefix +)</h3>
+  <div class="command">% : Vertical split</div>
+  <div class="command">" : Horizontal split</div>
+  <div class="command">arrow : Switch panes</div>
+  <div class="command">x : Kill pane</div>
+  <div class="command">z : Zoom pane</div>
+  <div class="command">space : Toggle layouts</div>
+
+  <h3>Miscellaneous</h3>
+  <div class="command">d : Detach session</div>
+  <div class="command">[ : Enter copy mode</div>
+  <div class="command">] : Paste</div>
+  <div class="command">$ : Rename session</div>
+  <div class="command">: : Command prompt</div>
+</section>
+
+<!-- UFW Section -->
+<section id="ufw">
+  <h2>UFW</h2>
+  
+  <h3>Basic Controls</h3>
+  <div class="command">ufw enable : Enable firewall</div>
+  <div class="command">ufw disable : Disable firewall</div>
+  <div class="command">ufw status : Show status</div>
+  <div class="command">ufw status verbose : Detailed status</div>
+
+  <h3>Default Policies</h3>
+  <div class="command">ufw default deny : Deny all incoming</div>
+  <div class="command">ufw default allow : Allow all incoming</div>
+
+  <h3>Rule Management</h3>
+  <div class="command">ufw allow 22 : Allow SSH</div>
+  <div class="command">ufw allow 80/tcp : Allow HTTP</div>
+  <div class="command">ufw allow from 192.168.1.100 : Allow from IP</div>
+  <div class="command">ufw deny 23 : Deny Telnet</div>
+  <div class="command">ufw delete allow 22 : Delete SSH rule</div>
+
+  <h3>Advanced</h3>
+  <div class="command">ufw reset : Reset all rules</div>
+  <div class="command">ufw logging on : Enable logging</div>
+  <div class="command">ufw app list : List application profiles</div>
+  <div class="command">ufw app info : Show profile info</div>
+</section>
+
+<!-- USERS Section -->
+<section id="users">
+  <h2>USERS</h2>
+  
+  <h3>User Information</h3>
+  <div class="command">whoami : Current user</div>
+  <div class="command">id : User and group info</div>
+  <div class="command">who : Logged in users</div>
+  <div class="command">w : Users and activities</div>
+  <div class="command">last : Last logins</div>
+
+  <h3>User Management</h3>
+  <div class="command">useradd -m : Create user with home</div>
+  <div class="command">useradd -G : Add to groups</div>
+  <div class="command">usermod -aG : Append to groups</div>
+  <div class="command">userdel -r : Remove user and home</div>
+  <div class="command">passwd -l : Lock account</div>
+  <div class="command">passwd -u : Unlock account</div>
+
+  <h3>Group Management</h3>
+  <div class="command">groupadd : Create group</div>
+  <div class="command">groupmod : Modify group</div>
+  <div class="command">groupdel : Delete group</div>
+  <div class="command">newgrp : Change primary group</div>
+
+  <h3>Privileges</h3>
+  <div class="command">sudo : Execute as superuser</div>
+  <div class="command">visudo : Edit sudoers safely</div>
+  <div class="command">su - : Login as user with env</div>
+</section>
+
+<!-- VIM Section -->
+<section id="vim">
+  <h2>VIM</h2>
+  
+  <h3>Movement</h3>
+  <div class="command">h : Left</div>
+  <div class="command">j : Down</div>
+  <div class="command">k : Up</div>
+  <div class="command">l : Right</div>
+  <div class="command">0 : Start of line</div>
+  <div class="command">$ : End of line</div>
+  <div class="command">gg : First line</div>
+  <div class="command">G : Last line</div>
+
+  <h3>Editing</h3>
+  <div class="command">i : Insert mode</div>
+  <div class="command">a : Append after cursor</div>
+  <div class="command">o : New line below</div>
+  <div class="command">O : New line above</div>
+  <div class="command">dd : Delete line</div>
+  <div class="command">yy : Yank (copy) line</div>
+  <div class="command">p : Paste after</div>
+
+  <h3>Search/Replace</h3>
+  <div class="command">/pattern : Search forward</div>
+  <div class="command">?pattern : Search backward</div>
+  <div class="command">:%s/old/new/g : Replace all</div>
+
+  <h3>File Operations</h3>
+  <div class="command">:w : Save</div>
+  <div class="command">:q : Quit</div>
+  <div class="command">:wq : Save and quit</div>
+  <div class="command">:q! : Quit without saving</div>
+</section>
+<!-- KERNEL Section -->
+<section id="kernel">
+  <h2>KERNEL</h2>
+  
+  <h3>Kernel Information</h3>
+  <div class="command">uname -r : Show kernel version</div>
+  <div class="command">uname -a : Show all system info</div>
+  <div class="command">cat /proc/version : Kernel version with compiler</div>
+  <div class="command">dmesg : Kernel ring buffer messages</div>
+  <div class="command">dmesg -H : Human-readable with timestamps</div>
+  
+  <h3>Module Management</h3>
+  <div class="command">lsmod : List loaded modules</div>
+  <div class="command">modinfo : Show module information</div>
+  <div class="command">modprobe : Load kernel module</div>
+  <div class="command">rmmod : Remove kernel module</div>
+  <div class="command">depmod : Generate modules.dep</div>
+  
+  <h3>Kernel Parameters</h3>
+  <div class="command">sysctl -a : List all kernel parameters</div>
+  <div class="command">sysctl -w parameter=value : Set parameter</div>
+  <div class="command">cat /proc/sys/kernel/ : View kernel settings</div>
+</section>
+
+<!-- CRON Section -->
+<section id="cron">
+  <h2>CRON</h2>
+  
+  <h3>Crontab Management</h3>
+  <div class="command">crontab -e : Edit user crontab</div>
+  <div class="command">crontab -l : List cron jobs</div>
+  <div class="command">crontab -r : Remove all cron jobs</div>
+  <div class="command">systemctl status cron : Check cron service</div>
+  
+  <h3>System Crontabs</h3>
+  <div class="command">/etc/crontab : System crontab</div>
+  <div class="command">/etc/cron.d/ : System cron jobs</div>
+  <div class="command">/etc/cron.hourly/ : Hourly jobs</div>
+  <div class="command">/etc/cron.daily/ : Daily jobs</div>
+  
+  <h3>Cron Syntax</h3>
+  <div class="command">* * * * * command : Minute Hour Day Month DayOfWeek</div>
+  <div class="command">@reboot command : Run at boot</div>
+  <div class="command">@daily command : Run daily</div>
+</section>
+
+<!-- LOGS Section -->
+<section id="logs">
+  <h2>LOGS</h2>
+  
+  <h3>System Logs</h3>
+  <div class="command">/var/log/syslog : Main system log</div>
+  <div class="command">/var/log/auth.log : Authentication logs</div>
+  <div class="command">/var/log/kern.log : Kernel logs</div>
+  <div class="command">/var/log/boot.log : Boot messages</div>
+  
+  <h3>Log Rotation</h3>
+  <div class="command">logrotate -f /etc/logrotate.conf : Force rotation</div>
+  <div class="command">/etc/logrotate.d/ : Custom rotation configs</div>
+  
+  <h3>Log Analysis</h3>
+  <div class="command">grep "error" /var/log/syslog : Filter errors</div>
+  <div class="command">tail -n 100 /var/log/syslog : Last 100 lines</div>
+  <div class="command">zgrep "pattern" /var/log/syslog.*.gz : Search rotated logs</div>
+</section>
+
+<!-- SSL/TLS Section -->
+<section id="ssl">
+  <h2>SSL/TLS</h2>
+  
+  <h3>Certificate Inspection</h3>
+  <div class="command">openssl x509 -in cert.pem -text : View certificate</div>
+  <div class="command">openssl s_client -connect host:443 : Test connection</div>
+  <div class="command">openssl req -text -in request.csr : View CSR</div>
+  
+  <h3>Key Generation</h3>
+  <div class="command">openssl genrsa -out key.pem 2048 : Generate RSA key</div>
+  <div class="command">openssl ecparam -genkey -name secp384r1 -out key.pem : Generate EC key</div>
+  <div class="command">openssl req -new -key key.pem -out request.csr : Generate CSR</div>
+  
+  <h3>Certificate Conversion</h3>
+  <div class="command">openssl x509 -in cert.cer -out cert.pem : Convert to PEM</div>
+  <div class="command">openssl pkcs12 -in cert.pfx -out cert.pem : Extract from PFX</div>
+</section>
+
+<!-- COMPRESSION Section -->
+<section id="compression">
+  <h2>COMPRESSION</h2>
+  
+  <h3>Archive Commands</h3>
+  <div class="command">tar -czvf archive.tar.gz dir/ : Create gzip tar</div>
+  <div class="command">tar -xzvf archive.tar.gz : Extract gzip tar</div>
+  <div class="command">tar -cjvf archive.tar.bz2 dir/ : Create bzip2 tar</div>
+  <div class="command">tar -xjvf archive.tar.bz2 : Extract bzip2 tar</div>
+  
+  <h3>Compression Tools</h3>
+  <div class="command">gzip file : Compress to .gz</div>
+  <div class="command">gunzip file.gz : Decompress .gz</div>
+  <div class="command">bzip2 file : Compress to .bz2</div>
+  <div class="command">bunzip2 file.bz2 : Decompress .bz2</div>
+  <div class="command">xz file : Compress to .xz</div>
+  <div class="command">unxz file.xz : Decompress .xz</div>
+  
+  <h3>Zip Archives</h3>
+  <div class="command">zip -r archive.zip dir/ : Create zip</div>
+  <div class="command">unzip archive.zip : Extract zip</div>
+  <div class="command">7z a archive.7z dir/ : Create 7z</div>
+  <div class="command">7z x archive.7z : Extract 7z</div>
+</section>
+
+<!-- PROCESS-MONITORING Section -->
+<section id="process-monitoring">
+  <h2>PROCESS MONITORING</h2>
+  
+  <h3>Process Inspection</h3>
+  <div class="command">ps aux : Show all processes</div>
+  <div class="command">ps -ef : Full format listing</div>
+  <div class="command">pgrep process : Find process ID</div>
+  <div class="command">pstree : Show process tree</div>
+  
+  <h3>Resource Monitoring</h3>
+  <div class="command">top : Interactive process viewer</div>
+  <div class="command">htop : Enhanced process viewer</div>
+  <div class="command">iotop : Disk I/O monitoring</div>
+  <div class="command">iftop : Network bandwidth monitoring</div>
+  
+  <h3>Process Control</h3>
+  <div class="command">kill -9 PID : Force kill process</div>
+  <div class="command">pkill process : Kill by name</div>
+  <div class="command">killall process : Kill all matching</div>
+  <div class="command">nice -n 10 command : Run with low priority</div>
+  <div class="command">renice 5 -p PID : Change priority</div>
+</section>
+
+<!-- SELINUX Section -->
+<section id="selinux">
+  <h2>SELINUX</h2>
+  
+  <h3>Status Management</h3>
+  <div class="command">getenforce : Check status</div>
+  <div class="command">setenforce 1 : Enable enforcing</div>
+  <div class="command">setenforce 0 : Set permissive</div>
+  <div class="command">sestatus : Detailed status</div>
+  
+  <h3>Context Management</h3>
+  <div class="command">ls -Z : Show SELinux contexts</div>
+  <div class="command">chcon -t type file : Change file type</div>
+  <div class="command">restorecon file : Restore default context</div>
+  
+  <h3>Troubleshooting</h3>
+  <div class="command">audit2allow : Generate policy from logs</div>
+  <div class="command">sealert -a /var/log/audit/audit.log : Analyze alerts</div>
+  <div class="command">semodule -l : List modules</div>
+</section>
+
+<!-- LVM Section -->
+<section id="lvm">
+  <h2>LVM</h2>
+  
+  <h3>Physical Volumes</h3>
+  <div class="command">pvcreate /dev/sdb1 : Create PV</div>
+  <div class="command">pvdisplay : Show PVs</div>
+  <div class="command">pvs : Brief PV status</div>
+  
+  <h3>Volume Groups</h3>
+  <div class="command">vgcreate vg_name /dev/sdb1 : Create VG</div>
+  <div class="command">vgextend vg_name /dev/sdc1 : Extend VG</div>
+  <div class="command">vgdisplay : Show VG info</div>
+  
+  <h3>Logical Volumes</h3>
+  <div class="command">lvcreate -L 10G -n lv_name vg_name : Create LV</div>
+  <div class="command">lvextend -L +5G /dev/vg_name/lv_name : Extend LV</div>
+  <div class="command">lvresize -L 20G /dev/vg_name/lv_name : Resize LV</div>
+  <div class="command">lvdisplay : Show LV info</div>
+</section>
+
+<!-- ENVIRONMENT Section -->
+<section id="environment">
+  <h2>ENVIRONMENT</h2>
+  
+  <h3>Variable Management</h3>
+  <div class="command">env : Show all variables</div>
+  <div class="command">echo $VAR : Show variable</div>
+  <div class="command">export VAR=value : Set variable</div>
+  <div class="command">unset VAR : Remove variable</div>
+  
+  <h3>Path Management</h3>
+  <div class="command">echo $PATH : Show path</div>
+  <div class="command">export PATH=$PATH:/new/path : Add to path</div>
+  
+  <h3>Shell Configuration</h3>
+  <div class="command">source ~/.bashrc : Reload bash config</div>
+  <div class="command">. ~/.profile : Reload profile</div>
+  <div class="command">alias ll='ls -la' : Create alias</div>
+  <div class="command">unalias ll : Remove alias</div>
+</section>
+
+<!-- TIME Section -->
+<section id="time">
+  <h2>TIME</h2>
+  
+  <h3>Date/Time Management</h3>
+  <div class="command">date : Show current date/time</div>
+  <div class="command">date +%s : Unix timestamp</div>
+  <div class="command">timedatectl : System time control</div>
+  <div class="command">ntpdate pool.ntp.org : Sync time with NTP</div>
+  
+  <h3>Time Zone</h3>
+  <div class="command">timedatectl list-timezones : List timezones</div>
+  <div class="command">timedatectl set-timezone Zone : Set timezone</div>
+  <div class="command">ln -sf /usr/share/zoneinfo/Zone /etc/localtime : Alternative method</div>
+  
+  <h3>Command Timing</h3>
+  <div class="command">time command : Measure execution time</div>
+  <div class="command">timeout 10s command : Run with timeout</div>
+</section>
+
+
+
+
+
+
+
+
+
+    <!-- They will maintain all functionality -->
+  </main>
+    
+  <footer>
+    Made with ❤️ by Your Name — <a href="https://github.com/yourusername">GitHub</a>
+  </footer>
+
+  <script>
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', function() {
+      setupSearch();
+      setupDarkModeToggle();
+      setupCopyButtons();
+      setupCategoryLinks();
+      setupKeyboardShortcuts();
+      setupMobileMenu();
+      
+      // Highlight current category in sidebar
+      highlightCurrentCategory();
+      
+      // Smooth scroll for anchor links
+      setupSmoothScrolling();
+    });
+
+    // Mobile menu functionality
+    function setupMobileMenu() {
+      const menuToggle = document.getElementById('mobileMenuToggle');
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+      
+      if (!menuToggle || !sidebar || !overlay) return;
+      
+      menuToggle.addEventListener('click', function(e) {
+        e.stopPropagation();
+        toggleMobileMenu();
+      });
+      
+      overlay.addEventListener('click', closeMobileMenu);
+      
+      function toggleMobileMenu() {
+        sidebar.classList.toggle('active');
+        overlay.classList.toggle('active');
+        document.body.classList.toggle('no-scroll', sidebar.classList.contains('active'));
+      }
+      
+      function closeMobileMenu() {
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.classList.remove('no-scroll');
+      }
+      
+      window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+          closeMobileMenu();
+        }
+      });
+    }
+
+    // Smooth scrolling for anchor links
+    function setupSmoothScrolling() {
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          e.preventDefault();
+          const targetId = this.getAttribute('href');
+          const targetElement = document.querySelector(targetId);
+          
+          if (targetElement) {
+            targetElement.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+            
+            // Close mobile menu if open
+            closeMobileMenu();
+            
+            // Update URL without jumping
+            if (history.pushState) {
+              history.pushState(null, null, targetId);
+            } else {
+              location.hash = targetId;
+            }
+          }
+        });
+      });
+    }
+
+    // Setup search functionality
+    function setupSearch() {
+      const searchInput = document.getElementById('search');
+      if (!searchInput) return;
+      
+      searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase().trim();
+        
+        if (searchTerm.length < 2) {
+          resetSearchHighlights();
+          return;
+        }
+        
+        performSearch(searchTerm);
+      });
+      
+      searchInput.addEventListener('search', function() {
+        if (this.value === '') {
+          resetSearchHighlights();
+        }
+      });
+    }
+    
+    function resetSearchHighlights() {
+      document.querySelectorAll('.highlight').forEach(el => {
+        el.classList.remove('highlight');
+        el.innerHTML = el.textContent;
+      });
+      
+      document.querySelectorAll('section').forEach(section => {
+        section.style.display = '';
+        section.classList.remove('search-result');
+      });
+      
+      document.querySelectorAll('.command').forEach(cmd => {
+        cmd.style.display = '';
+      });
+      
+      const noResults = document.querySelector('.no-results');
+      if (noResults) noResults.remove();
+    }
+    
+    function performSearch(searchTerm) {
+      let foundResults = false;
+      const regex = new RegExp(searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+      
+      document.querySelectorAll('section').forEach(section => {
+        let sectionHasResults = false;
+        const commands = section.querySelectorAll('.command');
+        
+        commands.forEach(command => {
+          const commandText = command.textContent.toLowerCase();
+          if (commandText.includes(searchTerm)) {
+            sectionHasResults = true;
+            foundResults = true;
+            
+            const html = command.innerHTML;
+            command.innerHTML = html.replace(regex, match => 
+              `<span class="highlight">${match}</span>`
+            );
+            command.style.display = '';
+            command.classList.add('search-result');
+          } else {
+            command.style.display = 'none';
+            command.innerHTML = command.textContent;
+          }
+        });
+        
+        if (sectionHasResults) {
+          section.style.display = '';
+          section.classList.add('search-result');
+        } else {
+          section.style.display = 'none';
+          section.classList.remove('search-result');
+        }
+      });
+      
+      const noResults = document.querySelector('.no-results');
+      if (!foundResults) {
+        if (!noResults) {
+          const noResultsDiv = document.createElement('div');
+          noResultsDiv.className = 'no-results';
+          noResultsDiv.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              <line x1="11" y1="8" x2="11" y2="14"></line>
+              <line x1="8" y1="11" x2="14" y2="11"></line>
+            </svg>
+            <p>No commands found matching "<strong>${searchTerm}</strong>"</p>
+            <p>Try different keywords or check spelling</p>
+          `;
+          document.getElementById('mainContent').prepend(noResultsDiv);
+        }
+      } else if (noResults) {
+        noResults.remove();
+      }
+    }
+
+    // Setup dark mode toggle
+    function setupDarkModeToggle() {
+      const toggleBtn = document.getElementById('toggleDarkMode');
+      if (!toggleBtn) return;
+      
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const savedMode = localStorage.getItem('darkMode');
+      
+      if (savedMode === 'light' || (!savedMode && !prefersDark)) {
+        enableLightMode();
+      }
+      
+      toggleBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        if (document.body.classList.contains('light-mode')) {
+          enableDarkMode();
+        } else {
+          enableLightMode();
+        }
+      });
+      
+      function enableLightMode() {
+        document.body.classList.add('light-mode');
+        document.documentElement.style.setProperty('--dark', '#f5f5f5');
+        document.documentElement.style.setProperty('--darker', '#e0e0e0');
+        document.documentElement.style.setProperty('--light', '#333333');
+        document.documentElement.style.setProperty('--code-bg', '#ffffff');
+        document.documentElement.style.setProperty('--code-color', '#333333');
+        document.documentElement.style.setProperty('--highlight', 'rgba(255, 213, 0, 0.5)');
+        localStorage.setItem('darkMode', 'light');
+      }
+      
+      function enableDarkMode() {
+        document.body.classList.remove('light-mode');
+        document.documentElement.style.setProperty('--dark', '#1e1e1e');
+        document.documentElement.style.setProperty('--darker', '#161616');
+        document.documentElement.style.setProperty('--light', '#d4d4d4');
+        document.documentElement.style.setProperty('--code-bg', '#252526');
+        document.documentElement.style.setProperty('--code-color', '#dcdcaa');
+        document.documentElement.style.setProperty('--highlight', 'rgba(255, 213, 0, 0.3)');
+        localStorage.setItem('darkMode', 'dark');
+      }
+    }
+
+    // Setup copy buttons
+    function setupCopyButtons() {
+      document.querySelectorAll('.command').forEach(command => {
+        if (!command.querySelector('.copy-btn')) {
+          const copyBtn = document.createElement('button');
+          copyBtn.className = 'copy-btn';
+          copyBtn.title = 'Copy to clipboard';
+          command.appendChild(copyBtn);
+        }
+      });
+      
+      document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('copy-btn')) {
+          const commandDiv = e.target.parentElement;
+          const commandText = commandDiv.textContent.replace('Copy', '').trim();
+          
+          navigator.clipboard.writeText(commandText).then(() => {
+            e.target.classList.add('copied');
+            setTimeout(() => {
+              e.target.classList.remove('copied');
+            }, 2000);
+          }).catch(err => {
+            console.error('Failed to copy text: ', err);
+          });
+        }
+      });
+    }
+    
+    // Setup category links in sidebar
+    function setupCategoryLinks() {
+      const categoryList = document.getElementById('categoryList');
+      if (!categoryList) return;
+      
+      const sections = document.querySelectorAll('section');
+      
+      sections.forEach(section => {
+        const sectionId = section.id;
+        const sectionTitle = section.querySelector('h2')?.textContent;
+        
+        if (sectionId && sectionTitle) {
+          const listItem = document.createElement('li');
+          listItem.innerHTML = `<a href="#${sectionId}">${sectionTitle}</a>`;
+          categoryList.appendChild(listItem);
+        }
+      });
+    }
+    
+    // Setup keyboard shortcuts
+    function setupKeyboardShortcuts() {
+      document.addEventListener('keydown', function(e) {
+        // Focus search when pressing / (like Vim)
+        if (e.key === '/' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+          e.preventDefault();
+          const searchInput = document.getElementById('search');
+          if (searchInput) {
+            searchInput.focus();
+          }
+        }
+        
+        // Clear search with Esc
+        if (e.key === 'Escape') {
+          const searchInput = document.getElementById('search');
+          if (searchInput && searchInput.value) {
+            searchInput.value = '';
+            resetSearchHighlights();
+          }
+        }
+      });
+    }
+
+    // Highlight current category in sidebar
+    function highlightCurrentCategory() {
+      const links = document.querySelectorAll('.category-list a');
+      if (!links.length) return;
+      
+      function updateActiveLink() {
+        const currentHash = window.location.hash;
+        
+        links.forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === currentHash) {
+            link.classList.add('active');
+            
+            // Scroll the sidebar to show the active link
+            link.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+          }
+        });
+      }
+      
+      window.addEventListener('hashchange', updateActiveLink);
+      window.addEventListener('load', updateActiveLink);
+    }
+
+    // Helper function to close mobile menu
+    function closeMobileMenu() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+      if (sidebar) sidebar.classList.remove('active');
+      if (overlay) overlay.classList.remove('active');
+      document.body.classList.remove('no-scroll');
+    }
+  </script>
+</body>
+</html>
