@@ -4,7 +4,6 @@
 # Linux Command Cheat Sheet Generator 🐧⚡
 
 ![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Deployed-brightgreen)
-![License](https://img.shields.io/badge/License-MIT-blue)
 ![Version](https://img.shields.io/badge/Version-1.0-orange)
 
 A Bash-powered tool that automatically generates a well-formatted Linux command cheat sheet from categorized command lists.
